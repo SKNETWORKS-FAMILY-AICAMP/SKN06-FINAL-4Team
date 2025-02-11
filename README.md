@@ -1,13 +1,5 @@
 # SKN06-FINAL-4TEAM
-
-
-
-
-
-
-
-
-
+<br><br><br><br><br><br><br><br><br><br><br>
 
 ### Netflix_to_Insta
 - 넷플릭스 "지금 많이보는", "주간순위", "신작"의 리스트 크롤링하여 인스타그램에 포스팅
