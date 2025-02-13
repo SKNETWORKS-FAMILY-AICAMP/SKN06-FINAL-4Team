@@ -58,35 +58,45 @@ def stillcut_to_background_images(movies_titles, source_folder="stillcuts_db", d
         os.makedirs(destination_folder)
 
     for title in movies_titles:
-        image_name = title.replace(':','')
-        image_name = f"{title}_stillcut.jpg"
+        # ":" 제거
+        sanitized_title = title.replace(":", "")
+        
+        # 파일명 생성
+        image_name = f"{sanitized_title}_stillcut.jpg"
         source_path = os.path.join(source_folder, image_name)
         destination_path = os.path.join(destination_folder, image_name)
 
-        # 파일이 존재하는지 확인
+        # 파일 존재 여부 확인 후 복사
         if os.path.exists(source_path):
-            shutil.copy2(source_path, destination_path)    # 원본 유지, 복사
-            print(f"✅ 파일 복사 완료!")
+            shutil.copy2(source_path, destination_path)  # 원본 유지, 복사
+            print(f"✅ 파일 복사 완료: {source_path} → {destination_path}")
         else:
-            print(f"❌ 파일 없음!")
+            print(f"❌ 파일 없음: {source_path}")
+
+    print("🎉 모든 파일 복사 완료!")
 
 
 def poster_to_background_images(movies_titles, source_folder="posters_db", destination_folder="background_images"):
     """
-    DB에 위치한 포스터 사진을 "background_images" 폴더로 옮기는 함수입니다.
+    DB에 위치한 포스터 사진을 "background_images" 폴더로 복사하는 함수입니다.
     """
     if not os.path.exists(destination_folder):
         os.makedirs(destination_folder)
 
     for title in movies_titles:
-        image_name = title.replace(':','')
-        image_name = f"{title}_poster.jpg"
+        # ":" 제거
+        sanitized_title = title.replace(":", "")
+        
+        # 파일명 생성
+        image_name = f"{sanitized_title}_poster.jpg"
         source_path = os.path.join(source_folder, image_name)
         destination_path = os.path.join(destination_folder, image_name)
 
-        # 파일이 존재하는지 확인
+        # 파일 존재 여부 확인 후 복사
         if os.path.exists(source_path):
-            shutil.copy2(source_path, destination_path)    # 원본 유지, 복사
-            print(f"✅ 파일 복사 완료!")
+            shutil.copy2(source_path, destination_path)  # 원본 유지, 복사
+            print(f"✅ 파일 복사 완료: {source_path} → {destination_path}")
         else:
-            print(f"❌ 파일 없음!")
+            print(f"❌ 파일 없음: {source_path}")
+
+    print("🎉 모든 파일 복사 완료!")

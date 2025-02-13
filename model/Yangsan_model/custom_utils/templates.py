@@ -63,12 +63,14 @@ def wrap_text_centered(text, font, max_width):
 def insta_post_1(movie_name, tagline):
     """
     카드뉴스 이미지 생성 함수입니다. Temp_No_1
-    - 배경 이미지: 스틸컷
+    - 배경 이미지: 포스터
     - 텍스트: 영화 제목 (#영화제목), 한줄 리뷰 (tagline)
     - 텍스트가 이미지 크기를 넘어서면 자동으로 줄바꿈 + 중앙 정렬
     """
-    background_image_path = f"images/{movie_name}_stillcut.jpg"
-    output_path = f"insta_post/{movie_name}_card_news.jpg"
+    sanitized_name = movie_name.replace(":", "")
+
+    background_image_path = f"posters_db/{sanitized_name}_poster.jpg"
+    output_path = f"insta_post/{sanitized_name}_card_news.jpg"
 
     # 배경 이미지 열기
     try:
@@ -202,7 +204,7 @@ def create_post_door(text):
     background = Image.alpha_composite(background, dark_overlay)
 
     # 📌 **폰트 크기 설정**
-    font_size = 95  # 테스트용 폰트 크기
+    font_size = 92  # 테스트용 폰트 크기
     first_line_font_size = int(font_size * 0.5)  # 첫 번째 줄 폰트 크기 축소
     font_path = "C:/USERS/PLAYDATA/APPDATA/LOCAL/MICROSOFT/WINDOWS/FONTS/KATURI.ttf"
     font_large = ImageFont.truetype(font_path, font_size)

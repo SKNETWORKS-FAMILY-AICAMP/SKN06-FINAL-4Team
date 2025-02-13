@@ -1,11 +1,13 @@
 import os
 import json
+import re
 from dotenv import load_dotenv
 import pandas as pd
 from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
 from langchain_core.runnables import RunnableLambda
+from langchain.schema import AIMessage
 
 load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
@@ -16,8 +18,20 @@ basic_info_df = pd.read_excel(EXCEL_FILE_PATH).fillna("")
 review_db_path = "../../data/MOVIE_DB/Review_in_DB.xlsx"
 review_df = pd.read_excel(review_db_path)
 
+# JSON 전처리 함수
+def clean_json_output(llm_output):
+    """
+    LLM이 반환한 JSON 문자열에서 Markdown 코드 블록(````json ... `````)을 제거하는 함수
+    """
+    if isinstance(llm_output, AIMessage):    # AIMessage 객체인지 확인
+        llm_output = llm_output.content    # 텍스트만 추출
+
+    clean_output = re.sub(r"```json\n(.*?)\n```", r"\1", llm_output, flags=re.DOTALL)
+    clean_output = clean_output.strip()
+    return clean_output
+
 # 게시물 생성 함수
-def generate_instagram_post(movie_titles):
+def generate_instagram_post(user_question, movie_titles):
     movie_data = []
 
     for title in movie_titles:
@@ -45,11 +59,14 @@ def generate_instagram_post(movie_titles):
         너는 AI 인플루언서야. 이름은 ni_movie_mu야.
         
         주 활동 채널은 인스타그램이고, 타겟층은 영화, ott 시리즈 등 영상물을 소비하는 20-30대 한국인이야.
-        이들은 인스타그램을 공부 혹은 직장 생활이 끝난 이후에 소비하는 데 거기서 영화를 소개하는 것을 보고 해당 영화를 소비할 동기를 얻어야 해. 
+        이들은 인스타그램을 공부 혹은 직장 생활이 끝난 이후에 소비하는 데 거기서 영화를 소개하는 것을 보고 해당 영화를 소비할 동기를 얻어야 해.
 
-        입력값으로 전체 게시물의 컨셉과 영화 혹은 시리즈의 제목을 입력받게 될거야. 
+        입력값으로 전체 게시물의 컨셉과 영화 혹은 시리즈의 제목을 입력받게 될거야.       
+        이 영화들은 사용자의 질문에 어울리는 작품을 엄선해서 고른거야.
+        사용자 질문: "{user_question}"
         
-        이를 기반으로 작성해주어야 할 것은 총 4개야. 
+        이를 기반으로 작성해주어야 할 것은 총 4개야.
+        아래 세부 내용을 참고해서 작성하되, 사용자의 질문(영화 선별 기준)을 바탕으로 작성해줘.
 
         1. 검색한 영화 혹은 시리즈에 대한 리뷰 한 줄을 작성해줘. 
             - 검색하는 영화나 시리즈는 최소 3개에서 20개까지 입력받을 수 있어. 즉, 입력받은 영화 모두에 대해서 리뷰 한줄을 작성해주어야 해. 
@@ -108,21 +125,42 @@ def generate_instagram_post(movie_titles):
         예시와 같은 형식으로 출력하는데, 절대 예시와 동일하게 하지 말고, context 기반 데이터를 활용해서 생성해줘.
         "게시글" 마지막 멘트(예시:"오늘밤, 어떤 이야기에 빠져볼래?")는 예시에 나온 것 처럼 게시글을 읽는 사람들에게 말을 건네는 듯한 마무리 멘트를 사용해야해. 절대 예시와 동일하게 생성하지 말고, 다양한 표현을 떠올려봐.
 
+        반드시 JSON 형식으로 출력해줘. JSON 이외의 형식으로 출력해서는 안돼!
         [영화 데이터]
         {context}
     """)
 
     # Output Parser
     parser = JsonOutputParser()
-    llm = ChatOpenAI(openai_api_key=openai_api_key, model_name="gpt-4o-mini")
+    llm = ChatOpenAI(openai_api_key=openai_api_key, model_name="gpt-4o-mini")  # JSON 형식 강제
 
     pipeline = (
-        RunnableLambda(lambda context: prompt_template.format(context=json.dumps(context, ensure_ascii=False))) |
+        RunnableLambda(lambda context: prompt_template.format(
+        context=json.dumps(context["context"], ensure_ascii=False),
+        user_question=context["user_question"])) |
         llm |
+        RunnableLambda(clean_json_output) |
         parser
     )
 
     # LLM 실행
-    result = pipeline.invoke({"context": movie_data})
+    raw_result = pipeline.invoke({
+        "context": json.dumps(movie_data, ensure_ascii=False),
+        "user_question": user_question
+    })
 
-    return result
+    # AIMessage 처리
+    if isinstance(raw_result, AIMessage):
+        raw_result = raw_result.content
+
+    # JSON 파싱 오류 방지
+    if isinstance(raw_result, dict):
+        parsed_result = raw_result
+    else:
+        try:
+            parsed_result = json.loads(raw_result)
+        except json.JSONDecodeError as e:
+            print(f"❌ JSON 파싱 오류 발생: {e}")
+            parsed_result = {}
+
+    return parsed_result
