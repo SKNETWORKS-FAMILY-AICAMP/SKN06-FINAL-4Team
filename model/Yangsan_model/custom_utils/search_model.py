@@ -199,7 +199,7 @@ def analyze_question_with_llm(user_question):
 
 
 # STEP2: 1차 필터링
-def search_movies_with_keywords(expanded_keywords, top_k=100):
+def search_movies_with_keywords(expanded_keywords, top_k=100):  # 처음 top_k = 100 
     """
     - 감독이나 주연 배우가 있는 경우: 전체 DB에서 직접 필터링 (FAISS 사용 X)
     - 핵심 키워드가 있는 경우: 해당 키워드를 최우선으로 검색 후 기존 검색 결과와 병합
@@ -310,34 +310,57 @@ def generate_recommendations(user_question, search_results, max_results=5, batch
         
         아래는 검색된 영화 목록입니다.
         이 중에서 사용자가 요청한 질문에 관련없는 영화는 제외하고, 가장 적절한 영화를 추천하세요.
-        단, 질문과 관련이 없는 영화는 제외하고, 관련된 영화가 {max_results}개보다 적다면 적은 개수만 추천하세요.
+        관련된 영화가 {max_results}개보다 적다면 적은 개수만 추천하세요.
 
         사람들에게 인지도가 높고 꾸준히 회자되는 영화를 우선적으로 추천하세요.
         질문이 특정 테마의 영화를 원하고 있다면 이를 바탕으로 추천하세요.
-        다만, DB에 없는 영화는 포함하지 마세요.
+        다만, context에 없는 영화는 포함하지 마세요.
 
-        답변을 반환하기 전, 다시 한번 이 영화가 사용자의 질문에 어울리는 영화인지, DB에 있는지 판단하세요.
+        **중요:** 답변은 **반드시** 다음 JSON 형식으로 영화제목 리스트를 반환하세요. 
+        JSON 이외의 텍스트는 절대 포함하지 마세요.
 
-        JSON 형식으로 영화 리스트를 반환하세요. JSON 이외의 텍스트는 절대 포함하지 마세요.
+        [[출력형식]] :
         {json.dumps(batch, ensure_ascii=False)}
+
+        영화의 상세 정보를 포함하지 마세요.
+        오직 "추천 영화"의 제목만 리스트에 포함해야 합니다. 
 
         예시:
         {{"추천 영화": ["영화1", "영화2", "영화3"]}}
         """
 
         response = openai_client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-4o",
             messages=[{"role": "system", "content": "당신은 영화 추천 전문가입니다."},
                     {"role": "user", "content": prompt}],
         )
 
+        # 삭제한 프롬프트 내용: 답변을 반환하기 전, 다시 한번 이 영화가 사용자의 질문에 어울리는 영화인지, context에 있는지 판단하세요.
+
         try:
             batch_recommendations = json.loads(response.choices[0].message.content).get("추천 영화", [])
+
+            # ✅ dict 형태가 있는 경우, '영화 제목' 값만 추출하여 리스트에 추가
+            batch_recommendations = [movie["영화 제목"] if isinstance(movie, dict) else movie for movie in batch_recommendations]
+
+            # movie_list = []
+            # for movie in batch_recommendations:
+            #     if isinstance(movie, dict):
+            #         movie_list.append(movie["영화 제목"])
+            #         print(movie_list)
+            #     else:
+            #         movie_list.append(movie)
+            #         print(movie_list)
+
+            # recommended_movies = movie_list
+
             recommended_movies.extend(batch_recommendations)
+
         except json.JSONDecodeError:
             print("❌ LLM에서 잘못된 응답을 받았습니다.")
+            print(f"응답내용: {response.choices[0].message.content}")
 
-                # ✅ 최대 결과 개수만큼만 유지
+        # ✅ 최대 결과 개수만큼만 유지
         if len(recommended_movies) >= max_results:
             break
 

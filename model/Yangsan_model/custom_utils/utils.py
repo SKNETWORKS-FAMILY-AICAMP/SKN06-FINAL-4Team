@@ -85,7 +85,7 @@ def poster_to_background_images(movies_titles, source_folder="posters_db", desti
 
     for title in movies_titles:
         # ":" 제거
-        sanitized_title = title.replace(":", "")
+        sanitized_title = title.replace(":", "").replace('?', '').replace('/', '').replace('<', '').replace('>', '')
         
         # 파일명 생성
         image_name = f"{sanitized_title}_poster.jpg"

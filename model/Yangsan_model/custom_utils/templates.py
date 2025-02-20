@@ -67,10 +67,10 @@ def insta_post_1(movie_name, tagline):
     - 텍스트: 영화 제목 (#영화제목), 한줄 리뷰 (tagline)
     - 텍스트가 이미지 크기를 넘어서면 자동으로 줄바꿈 + 중앙 정렬
     """
-    sanitized_name = movie_name.replace(":", "")
+    sanitized_name = movie_name.replace(":", "").replace('?', '').replace('/', '').replace('<', '').replace('>', '')
 
     background_image_path = f"posters_db/{sanitized_name}_poster.jpg"
-    output_path = f"insta_post/{sanitized_name}_card_news.jpg"
+    output_path = f"insta_post/1{sanitized_name}_card_news.jpg"
 
     # 배경 이미지 열기
     try:
@@ -180,7 +180,7 @@ def create_post_door(text):
     - : 기준 첫번째 줄은 작은 글씨 적용
     - 랜덤한 배경 이미지 위에 3D 효과 적용 (중앙 정렬 포함) 
     """
-    output_path = f"insta_post/movie_post_Door.jpg"
+    output_path = f"insta_post/0movie_post_Door.jpg"
 
     # ✅ 랜덤 배경 이미지 선택
     background_image_path = get_random_background_image("background_images")
