@@ -8,3 +8,10 @@
 - netflix_text.py : 텍스트 관련 처리 함수 포함 모듈.
 - 필요사항 : OpenAI API키. Instagram id, pw.
   
+### Boxoffice_to_Insta
+- KOBIS에서 제공하는주간 관객순위를 크롤링하여 인스타그램에 포스팅 
+- boxoffice_to_insta.ipynb : 메인
+- boxoffice_image.py : 이미지 관련 처리 함수 포함 모듈.
+- boxoffice_text.py : 텍스트 관련 처리 함수 포함 모듈.
+- 필요사항 : Instagram id, pw.
+  
