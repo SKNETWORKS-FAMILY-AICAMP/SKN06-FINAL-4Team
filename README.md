@@ -15,3 +15,9 @@
 - boxoffice_text.py : 텍스트 관련 처리 함수 포함 모듈.
 - 필요사항 : Instagram id, pw.
   
+### New_Movie_to_Insta
+- 새로운 영화에 대한 정보를 요약하여 인스타그램에 포스팅
+- new_movie_to_insta.ipynb : 메인
+- new_movie_image.py : 이미지 관련 처리 함수 포함 모듈.
+- new_movie_text.py : 텍스트 관련 처리 함수 포함 모듈.
+- 필요사항 : OpenAI API키. Instagram id, pw.
