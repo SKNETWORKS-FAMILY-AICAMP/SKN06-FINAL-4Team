@@ -71,6 +71,7 @@ def review_gen(review):
         return result
 
 
+# 게시물 하단 캡션 생성하는 함수 
 def netflix_caption(title, infos):
         title = title.replace(' ', '')
         info_text = '#' + title + '\n'
@@ -84,3 +85,9 @@ def netflix_caption(title, infos):
                 
         info_text = info_text + '\n#영화추천 #시리즈추천 #ott\n'
         return info_text
+
+
+# 로그 저장하는 함수 
+def save_netflix_csv():
+
+        pass

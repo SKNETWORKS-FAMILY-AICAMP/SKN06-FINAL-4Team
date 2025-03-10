@@ -46,7 +46,10 @@ def make_new_news_posting():
     titles = list(new_movie.keys())
     make_first_page_dx(titles)
 
-
     # 포스트 캡션
     caption = new_movie_caption(summarized)
+
+    # 로그 저장
+    save_new_movie_csv()
+
     return caption

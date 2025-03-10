@@ -104,3 +104,9 @@ def new_movie_caption(new_movie):
         
     info_text = info_text + '#ni_movie_mu #새영화 #극장가소식 \n'
     return info_text
+
+
+# 로그 저장하는 함수 
+def save_new_movie_csv():
+
+    pass

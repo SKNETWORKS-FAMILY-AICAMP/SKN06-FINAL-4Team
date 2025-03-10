@@ -95,8 +95,13 @@ def make_netflix_posting():
         print('\n게시물 올라갈 캡션 내용입니다.\n')
         print(info_texts)
         print("저장된 게시물과 텍스트를 확인 후 업로드를 진행해 주세요.")
+
+        # 로그 저장
+        save_netflix_csv()
         return info_texts
 
     except:
         print('종료 되었습니다.')
         return None
+    
+

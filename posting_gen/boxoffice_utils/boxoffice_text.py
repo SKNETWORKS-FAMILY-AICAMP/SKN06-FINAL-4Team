@@ -44,6 +44,7 @@ def get_weekly_boxoffice():
         driver.quit()
 
 
+# 게시물 하단 캡션 생성하는 함수 
 def boxoffice_caption(box_office):
     info_text = '이번주 #박스오피스 #주간순위 를 소개할게요!!\n\n'
 
@@ -54,3 +55,12 @@ def boxoffice_caption(box_office):
         
     info_text = info_text + '#ni_movie_mu #영화추천 \n출처: #영화관입장권통합전산망\n'
     return info_text
+
+
+# 로그 저장하는 함수 
+def save_boxoffice_csv():
+    
+
+
+
+    pass

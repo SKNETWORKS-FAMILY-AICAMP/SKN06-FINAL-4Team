@@ -24,8 +24,7 @@ while True:
         break
 
     elif posting_type == '3':
-        # caption = make_boxoffice_posting_katuri()
-        caption = make_boxoffice_posting_dx()
+        caption = make_boxoffice_posting()
         break
 
     elif posting_type == '4':
@@ -48,6 +47,7 @@ while True:
                     ''')
 
 print(caption)
+
 
 # if posting_type in [1, 2, 3, 4]:
 #     upload_images(caption)
