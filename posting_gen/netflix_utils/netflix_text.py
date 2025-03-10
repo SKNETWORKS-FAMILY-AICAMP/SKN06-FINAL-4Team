@@ -49,7 +49,8 @@ def review_gen(review):
                 [[Context]]의 내용을 바탕으로 영화 소개 내용을 작성해 주세요.
                 반드시 한줄로 작성해주세요.
                 반드시 20자 이내로 요약해주세요. 
-                이모티콘은 절대 사용하지 말아주세요. 
+                이모티콘은 절대 사용하지 말아주세요.
+                따옴표도 사용하지 말아주세요. 
                 가능하면 긍정적인 내용으로 작성해 주세요. 
                 [[Context]]에 내용이 없으면, 검색하여 작성해주세요.
                 말투는 10대 20대가 인스타그램에서 사용하는 말투를 사용해주세요.
@@ -66,7 +67,6 @@ def review_gen(review):
         chain = prompt_template | model | parser
 
         result = chain.invoke(review)
-        print(result)
 
         return result
 

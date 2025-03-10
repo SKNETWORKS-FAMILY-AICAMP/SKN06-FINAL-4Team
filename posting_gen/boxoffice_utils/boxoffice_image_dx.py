@@ -2,7 +2,6 @@ import os
 import time
 from datetime import datetime
 import random
-
 from PIL import Image, ImageFont, ImageDraw, ImageOps, ImageFilter
 
 

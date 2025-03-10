@@ -2,7 +2,8 @@ from ni_movie_mu_utils.crawling_kino import *
 from ni_movie_mu_utils.crawling_naver import * 
 
 from netflix_utils.netflix_text import *
-from netflix_utils.netflix_image import *
+from netflix_utils.netflix_image_katuri import *
+from netflix_utils.netflix_image_dx import *
 
 
 # 지금 많이 찾는
@@ -81,15 +82,15 @@ def make_netflix_posting():
             get_kino_image(i)
             short_review = review_gen(movie_reviews[i])
 
-            insta_netflix_katuri(i, short_review)
-            # insta_netflix_dx(i, short_review)
+            # insta_netflix_katuri(i, short_review)
+            insta_netflix_dx(i, short_review)
             
         except:
             continue
 
     try:
-        first_page_netflix_katuri(list_input)
-        # first_page_netflix_dx(list_input)
+        # first_page_netflix_katuri(list_input)
+        first_page_netflix_dx(list_input)
 
         print('\n게시물 올라갈 캡션 내용입니다.\n')
         print(info_texts)
