@@ -28,8 +28,7 @@ def get_netflix_list(url, naver_list):
         driver.get(url)
         time.sleep(1)
 
-        # for j in range(1,9):
-        for j in range(1,2):
+        for j in range(1,9):
             name = driver.find_element(By.XPATH, f'//*[@id="mflick"]/div/div/ul[{1}]/li[{j}]/strong/a').text
             naver_list.append(name)
 
