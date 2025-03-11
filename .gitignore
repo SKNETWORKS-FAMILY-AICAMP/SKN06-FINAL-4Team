@@ -1,3 +1,5 @@
 .env
 faiss_index.bin
 movie_indices.npy
+key_word_faiss_index.idx
+key_word_indices.npy
