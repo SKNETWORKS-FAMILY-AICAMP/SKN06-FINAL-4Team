@@ -23,6 +23,7 @@ def insta_boxoffice_dx(title, watches, tot_watches, rank):
         poster = Image.open(image_path)
 
         tagline = f'{rank}위 {watches}명 / 누적 {tot_watches}명'
+        print(tagline)
 
         # 이미지를 정사각형으로 만들기 (가로 길이에 맞춤)
         width, height = poster.size

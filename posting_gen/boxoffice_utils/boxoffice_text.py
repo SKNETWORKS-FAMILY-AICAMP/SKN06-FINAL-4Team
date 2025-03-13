@@ -1,9 +1,15 @@
+import os
 import time
-
+from datetime import datetime
+import pandas as pd 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 
+
+base_dir = os.getcwd()
+csv_path = os.path.join(base_dir, 'csv')
+os.makedirs(csv_path, exist_ok=True)
 
 # ChromeOptions 객체 생성
 chrome_options = Options()
@@ -58,9 +64,30 @@ def boxoffice_caption(box_office):
 
 
 # 로그 저장하는 함수 
-def save_boxoffice_csv():
+def save_boxoffice_csv(info):
+    file_name = 'boxoffice.csv'
+    file_path = os.path.join(csv_path, file_name)
     
+    # 데이터 준비
+    data = {
+        'title': list(info.keys()),
+        'sales/watches/total_watches': list(info.values()),
+        'posting_date': datetime.now().date()
+    }
 
+    # 기존 파일이 있는지 확인 후 처리
+    if os.path.exists(file_path):
+        # 기존 파일 읽기
+        df_existing = pd.read_csv(file_path, parse_dates=['posting_date'])
+        
+        # 새 데이터 DataFrame 생성 후 기존 데이터와 병합
+        df_new = pd.DataFrame(data)
+        df_combined = pd.concat([df_existing, df_new], ignore_index=True)
+    else:
+        # 파일이 없으면 새로 DataFrame 생성
+        df_combined = pd.DataFrame(data)
 
+    # CSV로 저장 (덮어쓰기)
+    df_combined.to_csv(file_path, index=False, date_format='%Y-%m-%d')
 
-    pass
+    print(df_combined)

@@ -59,6 +59,6 @@ def make_boxoffice_posting():
     caption = boxoffice_caption(weekly_boxoffice)
 
     # 로그 저장
-    save_boxoffice_csv()
+    save_boxoffice_csv(weekly_boxoffice)
 
     return caption

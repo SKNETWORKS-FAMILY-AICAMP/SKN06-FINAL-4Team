@@ -50,6 +50,6 @@ def make_new_news_posting():
     caption = new_movie_caption(summarized)
 
     # 로그 저장
-    save_new_movie_csv()
+    save_new_movie_csv(summarized)
 
     return caption

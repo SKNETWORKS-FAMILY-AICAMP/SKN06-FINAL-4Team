@@ -81,6 +81,7 @@ def make_netflix_posting():
             movie_reviews[i] = review + comment
             get_kino_image(i)
             short_review = review_gen(movie_reviews[i])
+            short_reviews[i] = short_review
 
             # insta_netflix_katuri(i, short_review)
             insta_netflix_dx(i, short_review)
@@ -97,7 +98,8 @@ def make_netflix_posting():
         print("저장된 게시물과 텍스트를 확인 후 업로드를 진행해 주세요.")
 
         # 로그 저장
-        save_netflix_csv()
+        save_netflix_csv(short_reviews)
+
         return info_texts
 
     except:
