@@ -17,4 +17,4 @@
 ### 4. New_Movie
 - 새로운 영화에 대한 정보를 요약하여 인스타그램에 포스팅
 
-필요사항 : OpenAI API키. Instagram id, pw.
+필요사항 : OpenAI API키. Instagram account id. Instagram API key
