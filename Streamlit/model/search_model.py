@@ -114,7 +114,7 @@ def analyze_question_with_llm(user_question):
     response = openai_client.chat.completions.create(
         model="gpt-4o",
         messages=[{"role": "system", "content": "당신은 영화 추천 전문가입니다."},
-                  {"role": "user", "content": prompt}],
+                {"role": "user", "content": prompt}],
     )
     # 🔹 응답 내용 가져오기
     raw_content = response.choices[0].message.content
