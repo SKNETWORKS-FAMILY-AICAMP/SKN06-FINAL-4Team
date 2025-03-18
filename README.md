@@ -1,8 +1,8 @@
 # SKN06-FINAL-4TEAM
-<br><br><br><br><br><br><br><br><br><br><br>
+<br>
 
-### 스트림릿으로 APP3.py 실행
-
+### 스트림릿
+- Streamlit 폴더로 이동 streamlit run app3.py 실행
 
 ### 1. 주제에 맞는 추천 영화
 - 무무스코어 설정 (0~10) 스코어 이상의 영화만 추천
